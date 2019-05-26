@@ -7,25 +7,27 @@ HEAP::HEAP()
 
 }
 
-void HEAP::insert(const int &elem)
+void HEAP::push(const int &elem)
 {
-    heap.push_back(elem);
-
-    if(size() > 0)
-        heapifyUp(size() - 1);
-
+    heap[length++] = elem;
+    heapifyUp(size() - 1);
 }
 
 void HEAP::pop()
 {
-    heap[0] = heap.back();
-    heap.pop_back();
-    heapifyDown(0);
+    if(empty())
+        throw invalid_argument("pop() on empty heap");
 
+    heap[0] = heap[size()-1];
+    --length;
+    heapifyDown(0);
 }
 
 void HEAP::heapifyUp(const size_t &index)
 {
+    if(index >= size())
+        throw invalid_argument("heapifyUp() on non-valid position");
+
     while (heap[parent(index)] < heap[index]) {
         int temp = heap[parent(index)];
         heap[parent(index)] = heap[index];
@@ -35,58 +37,106 @@ void HEAP::heapifyUp(const size_t &index)
     }
 }
 
-void HEAP::heapifyDown(const size_t &index)
+void HEAP::heapifyDown(const size_t index)
 {
-    int maximum = max(heap[left(index)], heap[right(index)]);
-    size_t max_pos = find(heap.begin(), heap.end(), maximum) - heap.begin();
+    if (index > size())
+        throw invalid_argument("heapifyDown() on non-valid position");
 
-    while (heap[index] < heap[max_pos]) {
+    int maximum = max(heap[left(index)], heap[right(index)]);
+    size_t max_pos = index;
+
+    if (heap[index] < maximum ) {
+        for(size_t i(0); i < size(); ++i)
+            if (heap[i] == maximum) {
+                max_pos = i;
+                break;
+            }
+    }
+
+    if (heap[index] < maximum) {
         int temp = heap[index];
         heap[index] = heap[max_pos];
         heap[max_pos] = temp;
-
         heapifyDown(max_pos);
     }
 }
 
 size_t HEAP::left(const size_t &parent)
 {
-    size_t pos = 2 * parent + 1;
-    return pos;
+    return 2 * parent + 1;
 }
 
 size_t HEAP::right(const size_t &parent)
 {
-    size_t pos = 2 * parent + 2;
-    return pos;
+    return 2 * parent + 2;;
 }
 
 size_t HEAP::parent(const size_t &child)
 {
-    size_t pos = size_t(floor((child - 1) / 2));
-    return pos;
+    return size_t(floor((child - 1) / 2));
+}
+
+string HEAP::spaces(const size_t n) const
+{
+    string s;
+    for(size_t i(0); i < n; ++i)
+        s += " ";
+
+    return s;
+}
+
+size_t HEAP::height(size_t &n) const
+{
+    if (empty())
+        throw invalid_argument("height() on empty heap");
+    return size_t(ceil(log2(n + 1) - 1));
 }
 
 size_t HEAP::size() const
 {
-    return heap.size();
+    return length;
 }
 
 void HEAP::show() const
 {
-    cout << "Heap: " << endl << endl;
+    if(empty())
+        throw invalid_argument("show() on empty heap");
+
+    cout << endl << "Heap: " << endl << endl;
 
     size_t p = 1;
     size_t cnt = 0;
 
-    cout << heap.front() << endl;
+    size_t h_len = size();
+    size_t h_height = height(h_len);
+    string h_spaces = spaces(h_height+1);
+
+    cout << h_spaces + " " + " " << heap[0] << endl;
     for(size_t i(1); i < size(); ++i) {
         if (i-1 == cnt + size_t(pow(2, p))) {
             cout << endl;
             cnt += pow(2, p++);
+            if (h_spaces.length() >= 2) {
+                h_spaces.pop_back();
+                h_spaces.pop_back();
+            }
         }
-        cout <<  heap[i] << " ";
+
+        cout << h_spaces << heap[i] << " ";
     }
     cout << endl << endl;
+}
+
+bool HEAP::empty() const
+{
+    return length == 0;
+}
+
+int HEAP::top() const
+{
+    if(empty())
+        throw invalid_argument("top() on empty heap");
+
+    return heap[0];
 }
 

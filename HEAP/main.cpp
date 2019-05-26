@@ -6,21 +6,27 @@ int main()
 {
     HEAP heap;
 
-    heap.insert(40);
-    heap.insert(18);
-    heap.insert(20);
-    heap.insert(15);
-    heap.insert(13);
-    heap.insert(9);
-    heap.insert(19);
-    heap.insert(1);
-    heap.insert(3);
-    heap.insert(8);
+    heap.push(1);
+    heap.push(2);
+    heap.push(3);
+    heap.push(4);
+    heap.push(5);
+    heap.push(1);
+    heap.push(2);
+    heap.push(3);
+    heap.push(4);
+    heap.push(5);
+
 
     heap.pop();
-    heap.pop();
+
 
     cout << "size(): " << heap.size() << endl;
+    cout << "empty(): " << heap.empty() << endl;
+    cout << "top(): " << heap.top() << endl;
+    size_t localLevel = heap.size();
+    cout << "height(): " << heap.height(localLevel) << endl;
+
     heap.show();
     return 0;
 }
