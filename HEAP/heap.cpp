@@ -1,5 +1,6 @@
 #include "heap.h"
 #include <math.h>
+#include <algorithm>
 
 HEAP::HEAP()
 {
@@ -11,18 +12,40 @@ void HEAP::insert(const int &elem)
     heap.push_back(elem);
 
     if(size() > 0)
-        heapify(size() - 1);
+        heapifyUp(size() - 1);
 
 }
 
-void HEAP::heapify(const size_t &index)
+void HEAP::pop()
+{
+    heap[0] = heap.back();
+    heap.pop_back();
+    heapifyDown(0);
+
+}
+
+void HEAP::heapifyUp(const size_t &index)
 {
     while (heap[parent(index)] < heap[index]) {
         int temp = heap[parent(index)];
         heap[parent(index)] = heap[index];
         heap[index] = temp;
 
-        heapify(parent(index));
+        heapifyUp(parent(index));
+    }
+}
+
+void HEAP::heapifyDown(const size_t &index)
+{
+    int maximum = max(heap[left(index)], heap[right(index)]);
+    size_t max_pos = find(heap.begin(), heap.end(), maximum) - heap.begin();
+
+    while (heap[index] < heap[max_pos]) {
+        int temp = heap[index];
+        heap[index] = heap[max_pos];
+        heap[max_pos] = temp;
+
+        heapifyDown(max_pos);
     }
 }
 

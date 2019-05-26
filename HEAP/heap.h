@@ -9,7 +9,8 @@ class HEAP
 {
 private:
     vector<int> heap;
-    void heapify(const size_t &index);
+    void heapifyUp(const size_t &index);
+    void heapifyDown(const size_t &index);
     size_t left(const size_t &parent);
     size_t right(const size_t &parent);
     size_t parent(const size_t &child);
@@ -17,6 +18,7 @@ private:
 public:
     HEAP();
     void insert(const int &elem);
+    void pop();
     size_t size() const;
     void show() const;
 
