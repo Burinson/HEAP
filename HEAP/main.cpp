@@ -16,10 +16,16 @@ int main()
     heap.push(3);
     heap.push(4);
     heap.push(5);
-
+    heap.push(3);
+    heap.push(4);
+    heap.push(5);
+    heap.push(5);
+    heap.push(5);
+    heap.push(5);
 
     heap.pop();
-
+    heap.pop();
+    heap.pop();
 
     cout << "size(): " << heap.size() << endl;
     cout << "empty(): " << heap.empty() << endl;

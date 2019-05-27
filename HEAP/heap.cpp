@@ -28,37 +28,33 @@ void HEAP::heapifyUp(const size_t &index)
     if(index >= size())
         throw invalid_argument("heapifyUp() on non-valid position");
 
-    while (heap[parent(index)] < heap[index]) {
-        int temp = heap[parent(index)];
-        heap[parent(index)] = heap[index];
-        heap[index] = temp;
-
+    if(index && heap[parent(index)] < heap[index]) {
+        swap(heap[index], heap[parent(index)]);
         heapifyUp(parent(index));
     }
 }
 
 void HEAP::heapifyDown(const size_t index)
 {
-    if (index > size())
+    if (index >= size())
         throw invalid_argument("heapifyDown() on non-valid position");
 
-    int maximum = max(heap[left(index)], heap[right(index)]);
+    size_t l = left(index);
+    size_t r = right(index);
+
     size_t max_pos = index;
 
-    if (heap[index] < maximum ) {
-        for(size_t i(0); i < size(); ++i)
-            if (heap[i] == maximum) {
-                max_pos = i;
-                break;
-            }
-    }
+    if (l < size() && heap[l] > heap[index])
+        max_pos = l;
 
-    if (heap[index] < maximum) {
-        int temp = heap[index];
-        heap[index] = heap[max_pos];
-        heap[max_pos] = temp;
+    if (r < size() && heap[r] > heap[max_pos])
+        max_pos = r;
+
+    if (max_pos != index) {
+        swap(heap[index], heap[max_pos]);
         heapifyDown(max_pos);
     }
+
 }
 
 size_t HEAP::left(const size_t &parent)
@@ -111,18 +107,18 @@ void HEAP::show() const
     size_t h_height = height(h_len);
     string h_spaces = spaces(h_height+1);
 
-    cout << h_spaces + " " + " " << heap[0] << endl;
+    cout << h_spaces + "   " << heap[0] << endl << h_spaces + "  ";
     for(size_t i(1); i < size(); ++i) {
         if (i-1 == cnt + size_t(pow(2, p))) {
             cout << endl;
+            cout << h_spaces;
             cnt += pow(2, p++);
             if (h_spaces.length() >= 2) {
                 h_spaces.pop_back();
                 h_spaces.pop_back();
             }
         }
-
-        cout << h_spaces << heap[i] << " ";
+            cout << heap[i] << " ";
     }
     cout << endl << endl;
 }
