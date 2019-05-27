@@ -25,7 +25,7 @@ void HEAP::pop()
 
 void HEAP::heapifyUp(const size_t &index)
 {
-    if(index >= size())
+    if(index > size())
         throw invalid_argument("heapifyUp() on non-valid position");
 
     if(index && heap[parent(index)] < heap[index]) {
@@ -36,7 +36,7 @@ void HEAP::heapifyUp(const size_t &index)
 
 void HEAP::heapifyDown(const size_t index)
 {
-    if (index >= size())
+    if (index > size())
         throw invalid_argument("heapifyDown() on non-valid position");
 
     size_t l = left(index);

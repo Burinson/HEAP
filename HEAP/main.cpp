@@ -4,6 +4,10 @@ using namespace std;
 
 int main()
 {
+    cout << "Jesús Uriel Guzmán Mendoza" << endl;
+    cout << "Proyecto final" << endl;
+    cout << "Estructuras de Datos" << endl;
+    cout << "27/05/2019" << endl << endl;
     HEAP heap;
 
     heap.push(1);
